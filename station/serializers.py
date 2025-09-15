@@ -15,10 +15,23 @@ class TrainSerializer(serializers.ModelSerializer):
         fields = ("id", "name", "cargo_num", "places_in_cargo", "train_type")
 
 
+class TrainListSerializer(TrainSerializer):
+    train_type = serializers.CharField(source="train_type.name", read_only=True)
+
+    class Meta(TrainSerializer.Meta):
+        fields = TrainSerializer.Meta.fields + ("train_type", )
+
+class TrainDetailSerializer(TrainSerializer):
+    train_type = TrainTypeSerializer(read_only=True)
+
+    class Meta(TrainSerializer.Meta):
+        fields = TrainSerializer.Meta.fields + ("train_type", )
+
+
 class StationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Station
-        fields = ("id", "latitude", "longitude")
+        fields = ("id", "name", "latitude", "longitude")
 
 
 class RouteSerializer(serializers.ModelSerializer):
