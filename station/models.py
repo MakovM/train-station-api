@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.db import models
 from django.db.models import UniqueConstraint
+from rest_framework.exceptions import ValidationError
 
 
 class TrainType(models.Model):
@@ -25,7 +26,7 @@ class Train(models.Model):
 
 
 class Station(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, unique=True)
     latitude = models.FloatField()
     longitude = models.FloatField()
 
@@ -48,6 +49,20 @@ class Route(models.Model):
 
     def __str__(self) -> str:
         return f"{self.source} - {self.destination}"
+
+    @staticmethod
+    def validate_route(source, destination, error_to_raise):
+        if source == destination:
+            raise error_to_raise({
+                "destination": "Source and destination stations must be different"
+            })
+
+    def clean(self):
+        Route.validate_route(self.source, self.destination, ValidationError)
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        return super().save(*args, **kwargs)
 
 
 class Crew(models.Model):
