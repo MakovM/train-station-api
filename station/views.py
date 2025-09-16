@@ -3,7 +3,7 @@ from rest_framework import viewsets
 from station.models import Train, TrainType, Station, Route, Crew, Journey, Order, Ticket
 from station.serializers import TrainSerializer, TrainTypeSerializer, StationSerializer, RouteSerializer, \
     CrewSerializer, JourneySerializer, OrderSerializer, TicketSerializer, TrainListSerializer, TrainDetailSerializer, \
-    RouteListSerializer, RouteDetailSerializer
+    RouteListSerializer, RouteDetailSerializer, JourneyListSerializer, JourneyDetailSerializer
 
 
 class TrainTypeViewSet(viewsets.ModelViewSet):
@@ -13,7 +13,6 @@ class TrainTypeViewSet(viewsets.ModelViewSet):
 
 class TrainViewSet(viewsets.ModelViewSet):
     queryset = Train.objects.all()
-    serializer_class = TrainSerializer
 
     def get_queryset(self):
         queryset = self.queryset
@@ -35,7 +34,6 @@ class StationViewSet(viewsets.ModelViewSet):
 
 class RouteViewSet(viewsets.ModelViewSet):
     queryset = Route.objects.select_related("source", "destination")
-    serializer_class = RouteSerializer
 
     def get_serializer_class(self):
         if self.action == "list":
@@ -51,7 +49,22 @@ class CrewViewSet(viewsets.ModelViewSet):
 
 class JourneyViewSet(viewsets.ModelViewSet):
     queryset = Journey.objects.all()
-    serializer_class = JourneySerializer
+
+    def get_queryset(self):
+        queryset = self.queryset
+        if self.action in ["list", "retrieve"]:
+            queryset = queryset.select_related(
+                "route", "route__source", "route__destination",
+                "train", "train__train_type"
+            ).prefetch_related("crew")
+        return queryset
+
+    def get_serializer_class(self):
+        if self.action == "list":
+            return JourneyListSerializer
+        elif self.action == "retrieve":
+            return JourneyDetailSerializer
+        return JourneySerializer
 
 
 class OrderViewSet(viewsets.ModelViewSet):

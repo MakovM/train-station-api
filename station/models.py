@@ -91,6 +91,20 @@ class Journey(models.Model):
         related_name="journeys"
     )
 
+    @staticmethod
+    def validate_date(departure_time, arrival_time, error_to_raise):
+        if arrival_time <= departure_time:
+            raise error_to_raise({
+                 "arrival_time": "Arrival time must be after departure time"
+            })
+
+    def clean(self):
+        Journey.validate_date(self.departure_time, self.arrival_time, ValidationError)
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        return super().save(*args, **kwargs)
+
     def __str__(self) -> str:
         return f"Journey {self.id}: {self.route} at {self.departure_time}"
 
