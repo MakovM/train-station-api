@@ -2,6 +2,7 @@ from django.db.models import F, Count
 from rest_framework import viewsets
 from django.db import connection
 
+from base.permissions import IsAdminOrReadOnly, IsAuthenticatedToCreate
 from station.filters import (
     TrainFilter,
     RouteFilter,
@@ -39,12 +40,15 @@ class TrainTypeViewSet(viewsets.ModelViewSet):
     queryset = TrainType.objects.all()
     serializer_class = TrainTypeSerializer
     search_fields = ["name"]
+    permission_classes = (IsAdminOrReadOnly,)
 
 
 class TrainViewSet(viewsets.ModelViewSet):
     queryset = Train.objects.all()
     filterset_class = TrainFilter
     search_fields = ["name"]
+    permission_classes = (IsAdminOrReadOnly,)
+
 
     def get_queryset(self):
         queryset = self.queryset
@@ -64,12 +68,15 @@ class StationViewSet(viewsets.ModelViewSet):
     queryset = Station.objects.all()
     serializer_class = StationSerializer
     search_fields = ["name"]
+    permission_classes = (IsAdminOrReadOnly,)
 
 
 class RouteViewSet(viewsets.ModelViewSet):
     queryset = Route.objects.select_related("source", "destination")
     filterset_class = RouteFilter
     search_fields = ["source__name", "destination__name"]
+    permission_classes = (IsAdminOrReadOnly,)
+
 
     def get_serializer_class(self):
         if self.action == "list":
@@ -83,10 +90,13 @@ class CrewViewSet(viewsets.ModelViewSet):
     queryset = Crew.objects.all()
     serializer_class = CrewSerializer
     search_fields = ["first_name", "last_name"]
+    permission_classes = (IsAdminOrReadOnly,)
+
 
 
 class JourneyViewSet(viewsets.ModelViewSet):
     queryset = Journey.objects.all()
+    permission_classes = (IsAdminOrReadOnly,)
     filterset_class = JourneyFilter
     search_fields = [
         "train__name",
@@ -132,6 +142,7 @@ class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
     filterset_class = OrderFilter
+    permission_classes = (IsAuthenticatedToCreate,)
 
     def get_queryset(self):
         queryset = self.queryset.filter(user=self.request.user)
