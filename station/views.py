@@ -1,6 +1,12 @@
 from django.db.models import F, Count
 from rest_framework import viewsets
 
+from station.filters import (
+    TrainFilter,
+    RouteFilter,
+    JourneyFilter,
+    OrderFilter
+)
 from station.models import (
     Train,
     TrainType,
@@ -31,10 +37,13 @@ from station.serializers import (
 class TrainTypeViewSet(viewsets.ModelViewSet):
     queryset = TrainType.objects.all()
     serializer_class = TrainTypeSerializer
+    search_fields = ["name"]
 
 
 class TrainViewSet(viewsets.ModelViewSet):
     queryset = Train.objects.all()
+    filterset_class = TrainFilter
+    search_fields = ["name"]
 
     def get_queryset(self):
         queryset = self.queryset
@@ -53,10 +62,13 @@ class TrainViewSet(viewsets.ModelViewSet):
 class StationViewSet(viewsets.ModelViewSet):
     queryset = Station.objects.all()
     serializer_class = StationSerializer
+    search_fields = ["name"]
 
 
 class RouteViewSet(viewsets.ModelViewSet):
     queryset = Route.objects.select_related("source", "destination")
+    filterset_class = RouteFilter
+    search_fields = ["source__name", "destination__name"]
 
     def get_serializer_class(self):
         if self.action == "list":
@@ -69,10 +81,17 @@ class RouteViewSet(viewsets.ModelViewSet):
 class CrewViewSet(viewsets.ModelViewSet):
     queryset = Crew.objects.all()
     serializer_class = CrewSerializer
+    search_fields = ["first_name", "last_name"]
 
 
 class JourneyViewSet(viewsets.ModelViewSet):
     queryset = Journey.objects.all()
+    filterset_class = JourneyFilter
+    search_fields = [
+        "train__name",
+        "route__source__name",
+        "route__destination__name"
+    ]
 
     def get_queryset(self):
         queryset = self.queryset
@@ -111,6 +130,7 @@ class JourneyViewSet(viewsets.ModelViewSet):
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
+    filterset_class = OrderFilter
 
     def get_queryset(self):
         queryset = self.queryset.filter(user=self.request.user)
