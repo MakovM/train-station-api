@@ -1,6 +1,5 @@
 from django.db.models import F, Count
 from rest_framework import viewsets
-from django.db import connection
 
 from base.permissions import IsAdminOrReadOnly, IsAuthenticatedToCreate
 from station.filters import (
@@ -49,7 +48,6 @@ class TrainViewSet(viewsets.ModelViewSet):
     search_fields = ["name"]
     permission_classes = (IsAdminOrReadOnly,)
 
-
     def get_queryset(self):
         queryset = self.queryset
         if self.action == "list":
@@ -77,7 +75,6 @@ class RouteViewSet(viewsets.ModelViewSet):
     search_fields = ["source__name", "destination__name"]
     permission_classes = (IsAdminOrReadOnly,)
 
-
     def get_serializer_class(self):
         if self.action == "list":
             return RouteListSerializer
@@ -91,7 +88,6 @@ class CrewViewSet(viewsets.ModelViewSet):
     serializer_class = CrewSerializer
     search_fields = ["first_name", "last_name"]
     permission_classes = (IsAdminOrReadOnly,)
-
 
 
 class JourneyViewSet(viewsets.ModelViewSet):
