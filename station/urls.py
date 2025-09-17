@@ -1,7 +1,12 @@
 from django.urls import path, include
 from station.views import (
-    TrainViewSet, TrainTypeViewSet, StationViewSet, RouteViewSet, CrewViewSet, JourneyViewSet, OrderViewSet,
-    TicketViewSet
+    TrainViewSet,
+    TrainTypeViewSet,
+    StationViewSet,
+    RouteViewSet,
+    CrewViewSet,
+    JourneyViewSet,
+    OrderViewSet,
 )
 from rest_framework import routers
 
@@ -16,7 +21,6 @@ router.register("routes", RouteViewSet)
 router.register("crews", CrewViewSet)
 router.register("journeys", JourneyViewSet)
 router.register("orders", OrderViewSet)
-router.register("tickets", TicketViewSet)
 
 urlpatterns = [
     path("", include(router.urls)),

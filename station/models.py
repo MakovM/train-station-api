@@ -54,7 +54,8 @@ class Route(models.Model):
     def validate_route(source, destination, error_to_raise):
         if source == destination:
             raise error_to_raise({
-                "destination": "Source and destination stations must be different"
+                "destination": "Source and destination "
+                               "stations must be different"
             })
 
     def clean(self):
@@ -95,11 +96,16 @@ class Journey(models.Model):
     def validate_date(departure_time, arrival_time, error_to_raise):
         if arrival_time <= departure_time:
             raise error_to_raise({
-                 "arrival_time": "Arrival time must be after departure time"
+                 "arrival_time": "Arrival time must "
+                                 "be after departure time"
             })
 
     def clean(self):
-        Journey.validate_date(self.departure_time, self.arrival_time, ValidationError)
+        Journey.validate_date(
+            self.departure_time,
+            self.arrival_time,
+            ValidationError
+        )
 
     def save(self, *args, **kwargs):
         self.full_clean()
@@ -146,6 +152,24 @@ class Ticket(models.Model):
             )
         ]
         ordering = ("journey", "cargo", "seat")
+
+    @staticmethod
+    def validate_seat(seat: int, num_seats: int, error_to_raise):
+        if not (1 <= seat <= num_seats):
+            raise error_to_raise({
+                "seat": f"seat must be in range [1, {num_seats}], not {seat}"
+            })
+
+    def clean(self):
+        Ticket.validate_seat(
+            self.seat,
+            self.journey.train.places_in_cargo,
+            ValidationError
+        )
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        return super().save(*args, **kwargs)
 
     def __str__(self) -> str:
         return (f"Ticket {self.id}: "
