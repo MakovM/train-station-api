@@ -1,5 +1,6 @@
 from django.db.models import F, Count
 from rest_framework import viewsets
+from django.db import connection
 
 from station.filters import (
     TrainFilter,
