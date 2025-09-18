@@ -1,0 +1,94 @@
+[
+  {
+    "model": "station.traintype",
+    "pk": 3,
+    "fields": {"name": "Passenger Express"}
+  },
+  {
+    "model": "station.traintype",
+    "pk": 4,
+    "fields": {"name": "Cargo Freight"}
+  },
+  {
+    "model": "station.train",
+    "pk": 6,
+    "fields": {"name": "InterCity 101", "cargo_num": 50, "places_in_cargo": 10, "train_type": 3}
+  },
+  {
+    "model": "station.train",
+    "pk": 7,
+    "fields": {"name": "FreightMaster 2000", "cargo_num": 20, "places_in_cargo": 50, "train_type": 4}
+  },
+  {
+    "model": "station.station",
+    "pk": 3,
+    "fields": {"name": "West Terminal", "latitude": 50.4501, "longitude": 30.5234}
+  },
+  {
+    "model": "station.station",
+    "pk": 4,
+    "fields": {"name": "East Terminal", "latitude": 30.5234, "longitude": 50.4501}
+  },
+  {
+    "model": "station.station",
+    "pk": 5,
+    "fields": {"name": "Central Station", "latitude": 2.0, "longitude": 2.0}
+  },
+  {
+    "model": "station.route",
+    "pk": 6,
+    "fields": {"source": 3, "destination": 4, "distance": 123}
+  },
+  {
+    "model": "station.route",
+    "pk": 7,
+    "fields": {"source": 4, "destination": 5, "distance": 12}
+  },
+  {
+    "model": "station.crew",
+    "pk": 2,
+    "fields": {"first_name": "John", "last_name": "Smith"}
+  },
+  {
+    "model": "station.crew",
+    "pk": 3,
+    "fields": {"first_name": "Nick", "last_name": "Fury"}
+  },
+  {
+    "model": "station.journey",
+    "pk": 6,
+    "fields": {"route": 6, "train": 6, "departure_time": "2025-09-17T12:07:07Z", "arrival_time": "2025-09-17T13:07:09Z", "crew": [2]}
+  },
+  {
+    "model": "station.journey",
+    "pk": 7,
+    "fields": {"route": 7, "train": 7, "departure_time": "2025-09-17T12:07:21Z", "arrival_time": "2025-09-17T15:07:22Z", "crew": [3]}
+  },
+  {
+    "model": "station.order",
+    "pk": 7,
+    "fields": {"created_at": "2025-09-18T00:58:42.427Z", "user": 3}
+  },
+  {
+    "model": "station.ticket",
+    "pk": 10,
+    "fields": {"cargo": 1, "seat": 1, "journey": 7, "order": 7}
+  },
+  {
+    "model": "user.user",
+    "pk": 3,
+    "fields": {
+      "password": "pbkdf2_sha256$1000000$Q0GqMAR1pyuDY4gR0UXEFX$YouPN1N5Jyf5C8kVjGNMR0m1vEkern7kufuNrhunz9M=",
+      "last_login": "2025-09-18T00:58:33.970Z",
+      "is_superuser": true,
+      "first_name": "",
+      "last_name": "",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2025-09-17T16:06:23Z",
+      "email": "admin@test.com",
+      "groups": [],
+      "user_permissions": []
+    }
+  }
+]

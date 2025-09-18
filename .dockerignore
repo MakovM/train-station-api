@@ -1,0 +1,10 @@
+venv/
+.env
+*.sqlite3
+README.md
+Dockerfile
+.gitignore
+.dockerignore
+__pycache__/
+*.py[cod]
+*$py.class
