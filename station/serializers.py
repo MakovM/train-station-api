@@ -59,6 +59,7 @@ class RouteSerializer(serializers.ModelSerializer):
             attrs["destination"],
             serializers.ValidationError
         )
+        return attrs
 
 
 class RouteListSerializer(RouteSerializer):
@@ -98,6 +99,7 @@ class JourneySerializer(serializers.ModelSerializer):
                 attrs["arrival_time"],
                 serializers.ValidationError
             )
+            return attrs
 
 
 class JourneyListSerializer(JourneySerializer):
@@ -151,6 +153,7 @@ class TicketSerializer(serializers.ModelSerializer):
             attrs["journey"].train.places_in_cargo,
             serializers.ValidationError
         )
+        return attrs
 
 
 class TicketListSerializer(TicketSerializer):

@@ -89,7 +89,8 @@ class Journey(models.Model):
     arrival_time = models.DateTimeField()
     crew = models.ManyToManyField(
         Crew,
-        related_name="journeys"
+        related_name="journeys",
+        blank=True
     )
 
     @staticmethod
