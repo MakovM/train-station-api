@@ -1,4 +1,3 @@
-from rest_framework import permissions
 from rest_framework.permissions import SAFE_METHODS, BasePermission
 
 
@@ -15,7 +14,6 @@ class IsAuthenticatedToCreate(BasePermission):
         if user and user.is_staff:
             return True
         if user and user.is_authenticated:
-            # авторизований користувач може POST і GET
             if request.method in ["POST", "GET"]:
                 return True
         return False

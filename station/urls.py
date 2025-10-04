@@ -22,6 +22,4 @@ router.register("crews", CrewViewSet)
 router.register("journeys", JourneyViewSet)
 router.register("orders", OrderViewSet)
 
-urlpatterns = [
-    path("", include(router.urls)),
-]
+urlpatterns = router.urls
