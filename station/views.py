@@ -1,4 +1,5 @@
 from django.db.models import F, Count
+from drf_spectacular.utils import OpenApiParameter, extend_schema, OpenApiTypes
 from rest_framework import viewsets
 
 from base.permissions import IsAdminOrReadOnly, IsAuthenticatedToCreate
@@ -35,6 +36,16 @@ from station.serializers import (
 )
 
 
+@extend_schema(
+    parameters=[
+        OpenApiParameter(
+            name="search",
+            type=OpenApiTypes.STR,
+            location=OpenApiParameter.QUERY,
+            description="Search train type by name",
+        ),
+    ]
+)
 class TrainTypeViewSet(viewsets.ModelViewSet):
     queryset = TrainType.objects.all()
     serializer_class = TrainTypeSerializer
@@ -42,6 +53,16 @@ class TrainTypeViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAdminOrReadOnly,)
 
 
+@extend_schema(
+    parameters=[
+        OpenApiParameter(
+            name="search",
+            type=OpenApiTypes.STR,
+            location=OpenApiParameter.QUERY,
+            description="Search train by name",
+        ),
+    ]
+)
 class TrainViewSet(viewsets.ModelViewSet):
     queryset = Train.objects.all()
     filterset_class = TrainFilter
@@ -62,6 +83,16 @@ class TrainViewSet(viewsets.ModelViewSet):
         return TrainSerializer
 
 
+@extend_schema(
+    parameters=[
+        OpenApiParameter(
+            name="search",
+            type=OpenApiTypes.STR,
+            location=OpenApiParameter.QUERY,
+            description="Search station by name",
+        ),
+    ]
+)
 class StationViewSet(viewsets.ModelViewSet):
     queryset = Station.objects.all()
     serializer_class = StationSerializer
@@ -69,6 +100,16 @@ class StationViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAdminOrReadOnly,)
 
 
+@extend_schema(
+    parameters=[
+        OpenApiParameter(
+            name="search",
+            type=OpenApiTypes.STR,
+            location=OpenApiParameter.QUERY,
+            description="Search routes by station",
+        ),
+    ]
+)
 class RouteViewSet(viewsets.ModelViewSet):
     queryset = Route.objects.select_related("source", "destination")
     filterset_class = RouteFilter
@@ -83,6 +124,16 @@ class RouteViewSet(viewsets.ModelViewSet):
         return RouteSerializer
 
 
+@extend_schema(
+    parameters=[
+        OpenApiParameter(
+            name="search",
+            type=OpenApiTypes.STR,
+            location=OpenApiParameter.QUERY,
+            description="Search crews by first or last name",
+        ),
+    ]
+)
 class CrewViewSet(viewsets.ModelViewSet):
     queryset = Crew.objects.all()
     serializer_class = CrewSerializer
@@ -90,6 +141,16 @@ class CrewViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAdminOrReadOnly,)
 
 
+@extend_schema(
+    parameters=[
+        OpenApiParameter(
+            name="search",
+            type=OpenApiTypes.STR,
+            location=OpenApiParameter.QUERY,
+            description="Search journeys by train name or station",
+        ),
+    ]
+)
 class JourneyViewSet(viewsets.ModelViewSet):
     queryset = Journey.objects.all()
     permission_classes = (IsAdminOrReadOnly,)
